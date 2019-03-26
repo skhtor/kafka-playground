@@ -21,41 +21,14 @@ resource "aws_vpc" "kafka-vpc" {
   }
 }
 
-resource "aws_subnet" "kafka-subnet-a" {
-  vpc_id = "${aws_vpc.kafka-vpc.id}"
-  cidr_block = "10.0.0.0/24"
-  availability_zone = "ap-southeast-2a"
-
-  tags = {
-    Name = "Kafka Subnet A"
-  }
-}
-
-resource "aws_subnet" "kafka-subnet-b" {
-  vpc_id = "${aws_vpc.kafka-vpc.id}"
-  cidr_block = "10.0.1.0/24"
-  availability_zone = "ap-southeast-2b"
-
-  tags = {
-    Name = "Kafka Subnet B"
-  }
-}
-
-resource "aws_subnet" "kafka-subnet-c" {
-  vpc_id = "${aws_vpc.kafka-vpc.id}"
-  cidr_block = "10.0.2.0/24"
-  availability_zone = "ap-southeast-2c"
-
-  tags = {
-    Name = "Kafka Subnet C"
-  }
-}
-
 resource "aws_launch_configuration" "kafka-lc" {
   name_prefix   = "kafka-"
   image_id      = "ami-04481c741a0311bbb"
   instance_type = "t2.micro"
+  associate_public_ip_address = "true"
   user_data     = "yum install -y wget"
+  key_name      = "${var.ami_key_pair_name}"
+  security_groups = ["${aws_security_group.ingress-all-kafka.id}"]
 }
 
 resource "aws_autoscaling_group" "kafka-asg" {
