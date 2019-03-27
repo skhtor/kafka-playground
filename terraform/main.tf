@@ -1,5 +1,5 @@
 provider "aws" {
-  profile = "acloudguru"
+  profile = "ivan-dev"
   region = "ap-southeast-2"
 }
 
@@ -9,6 +9,7 @@ terraform {
     bucket = "3421-4728-4271-terraform-statestore"
     region = "ap-southeast-2"
     key = "statefile"
+    profile = "ivan-dev"
   }
 }
 
