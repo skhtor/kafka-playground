@@ -17,12 +17,13 @@ resource "aws_launch_configuration" "kafka-lc" {
 
 resource "aws_autoscaling_group" "kafka-asg" {
   name                      = "kafka-asg"
-  max_size                  = 1
-  min_size                  = 1
-  desired_capacity          = 1
+  max_size                  = 3
+  min_size                  = 3
+  desired_capacity          = 3
   health_check_grace_period = 300
   health_check_type         = "ELB"
   force_delete              = true
+  termination_policies      = ["OldestLaunchConfiguration"]
   load_balancers            = ["${aws_elb.kafka-elb.name}"]
   launch_configuration      = "${aws_launch_configuration.kafka-lc.name}"
   vpc_zone_identifier       = ["${aws_subnet.kafka-subnet-a.id}",
