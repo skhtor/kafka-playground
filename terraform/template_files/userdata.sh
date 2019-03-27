@@ -8,4 +8,4 @@ sudo yum install -y git
 echo "Cloning git repo"
 git clone https://github.com/soony88/kafka-playground.git
 echo "Running playbook"
-ansible-playbook kafka-playground/ansible/playbook_local.yml
+ansible-playbook kafka-playground/ansible/playbook_local.yml -i ansible/hosts.yml

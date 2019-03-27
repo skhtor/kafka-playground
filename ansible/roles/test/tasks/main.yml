@@ -2,9 +2,6 @@
 - name: Print out the linux distribution
   command: uname -a
 
-# - name: Get uptime
-#   command: uptime
-#
 - name: Install nginx via amazon extras
   command: amazon-linux-extras install nginx1.12 -y
 
