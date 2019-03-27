@@ -1,18 +1,17 @@
-resource "aws_launch_configuration" "kafka-lc" {
-  name_prefix   = "kafka-"
-  image_id      = "ami-04481c741a0311bbb"
-  instance_type = "t2.micro"
-  associate_public_ip_address = "true"
-  user_data     = <<USER_DATA
-#!/bin/bash
-sudo amazon-linux-extras install nginx1.12 -y
-sudo service nginx start
-  USER_DATA
+data "template_file" "userdata" {
+  template = "${file("${path.module}/template_files/userdata.sh")}"
+}
 
-  key_name      = "${var.ami_key_pair_name}"
-  security_groups = ["${aws_security_group.ingress-all-kafka.id}"]
+resource "aws_launch_configuration" "kafka-lc" {
+  name_prefix                 = "kafka-"
+  image_id                    = "ami-04481c741a0311bbb"
+  instance_type               = "t2.micro"
+  associate_public_ip_address = "true"
+  user_data                   = "${data.template_file.userdata.rendered}"
+  key_name                    = "${var.ami_key_pair_name}"
+  security_groups             = ["${aws_security_group.ingress-all-kafka.id}"]
   lifecycle{
-    create_before_destroy     = true
+    create_before_destroy = true
   }
 }
 
@@ -30,28 +29,28 @@ resource "aws_autoscaling_group" "kafka-asg" {
                                "${aws_subnet.kafka-subnet-b.id}",
                                "${aws_subnet.kafka-subnet-c.id}"]
   lifecycle {
-    create_before_destroy     = true
+    create_before_destroy = true
   }
 }
 
 resource "aws_elb" "kafka-elb" {
-  name               = "kafka-eload-balancer"
-  internal           = false
-  subnets            = ["${aws_subnet.kafka-subnet-a.id}",
-                        "${aws_subnet.kafka-subnet-b.id}",
-                        "${aws_subnet.kafka-subnet-c.id}"]
-  cross_zone_load_balancing   = true
+  name                      = "kafka-eload-balancer"
+  internal                  = false
+  subnets                   = ["${aws_subnet.kafka-subnet-a.id}",
+                               "${aws_subnet.kafka-subnet-b.id}",
+                               "${aws_subnet.kafka-subnet-c.id}"]
+  cross_zone_load_balancing = true
   health_check {
-    healthy_threshold = 2
+    healthy_threshold   = 2
     unhealthy_threshold = 2
-    timeout = 3
-    interval = 30
-    target = "HTTP:80/"
+    timeout             = 3
+    interval            = 30
+    target              = "HTTP:80/"
   }
   listener {
-    lb_port = 80
-    lb_protocol = "http"
-    instance_port = "80"
+    lb_port           = 80
+    lb_protocol       = "http"
+    instance_port     = "80"
     instance_protocol = "http"
   }
 }
