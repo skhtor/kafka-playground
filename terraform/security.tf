@@ -20,7 +20,7 @@ resource "aws_security_group" "ingress-all-kafka" {
   }
   ingress {
       cidr_blocks = [
-        "10.0.0.0/32"
+        "0.0.0.0/0"
       ]
       from_port = 2181
       to_port = 2181
@@ -28,7 +28,15 @@ resource "aws_security_group" "ingress-all-kafka" {
   }
   ingress {
       cidr_blocks = [
-        "10.0.0.0/32"
+        "0.0.0.0/0"
+      ]
+      from_port = 2888
+      to_port = 2888
+      protocol = "tcp"
+  }
+  ingress {
+      cidr_blocks = [
+        "0.0.0.0/0"
       ]
       from_port = 3888
       to_port = 3888
@@ -36,7 +44,7 @@ resource "aws_security_group" "ingress-all-kafka" {
   }
   ingress {
       cidr_blocks = [
-        "10.0.0.0/32"
+        "0.0.0.0/0"
       ]
       from_port = 8081
       to_port = 8081
@@ -44,7 +52,7 @@ resource "aws_security_group" "ingress-all-kafka" {
   }
   ingress {
       cidr_blocks = [
-        "10.0.0.0/32"
+        "0.0.0.0/0"
       ]
       from_port = 8082
       to_port = 8082
@@ -52,7 +60,7 @@ resource "aws_security_group" "ingress-all-kafka" {
   }
   ingress {
       cidr_blocks = [
-        "10.0.0.0/32"
+        "0.0.0.0/0"
       ]
       from_port = 8083
       to_port = 8083
@@ -60,7 +68,7 @@ resource "aws_security_group" "ingress-all-kafka" {
   }
   ingress {
       cidr_blocks = [
-        "10.0.0.0/32"
+        "0.0.0.0/0"
       ]
       from_port = 8088
       to_port = 8088
@@ -68,7 +76,7 @@ resource "aws_security_group" "ingress-all-kafka" {
   }
   ingress {
       cidr_blocks = [
-        "10.0.0.0/32"
+        "0.0.0.0/0"
       ]
       from_port = 9021
       to_port = 9021
@@ -76,7 +84,7 @@ resource "aws_security_group" "ingress-all-kafka" {
   }
   ingress {
       cidr_blocks = [
-        "10.0.0.0/32"
+        "0.0.0.0/0"
       ]
       from_port = 9092
       to_port = 9092
