@@ -5,7 +5,7 @@ data "template_file" "userdata" {
 resource "aws_launch_configuration" "kafka-lc" {
   name_prefix                 = "kafka-"
   image_id                    = "ami-04481c741a0311bbb"
-  instance_type               = "t2.micro"
+  instance_type               = "r5.large"
   associate_public_ip_address = "true"
   user_data                   = "${data.template_file.userdata.rendered}"
   key_name                    = "${var.ami_key_pair_name}"
@@ -17,9 +17,9 @@ resource "aws_launch_configuration" "kafka-lc" {
 
 resource "aws_autoscaling_group" "kafka-asg" {
   name                      = "kafka-asg"
-  max_size                  = 3
-  min_size                  = 3
-  desired_capacity          = 3
+  max_size                  = 2
+  min_size                  = 2
+  desired_capacity          = 2
   health_check_grace_period = 300
   health_check_type         = "ELB"
   force_delete              = true
@@ -31,6 +31,12 @@ resource "aws_autoscaling_group" "kafka-asg" {
                                "${aws_subnet.kafka-subnet-c.id}"]
   lifecycle {
     create_before_destroy = true
+  }
+
+  tag {
+    key = "Name"
+    value = "Kafka Node"
+    propagate_at_launch = true
   }
 }
 
@@ -54,4 +60,18 @@ resource "aws_elb" "kafka-elb" {
     instance_port     = "80"
     instance_protocol = "http"
   }
+}
+
+resource "aws_instance" "bastion" {
+    ami                         = "ami-04481c741a0311bbb"
+    instance_type               = "t2.micro"
+    key_name                    = "${var.ami_key_pair_name}"
+    security_groups             = ["${aws_security_group.ingress-all-kafka.id}"]
+    associate_public_ip_address = "true"
+    user_data                   = "${data.template_file.userdata.rendered}"
+    subnet_id                   = "${aws_subnet.kafka-subnet-a.id}"
+
+    tags = {
+      Name = "Bastion"
+    }
 }
