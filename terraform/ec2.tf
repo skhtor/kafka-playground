@@ -17,9 +17,9 @@ resource "aws_launch_configuration" "kafka-lc" {
 
 resource "aws_autoscaling_group" "kafka-asg" {
   name                      = "kafka-asg"
-  max_size                  = 2
-  min_size                  = 2
-  desired_capacity          = 2
+  max_size                  = 3
+  min_size                  = 3
+  desired_capacity          = 3
   health_check_grace_period = 300
   health_check_type         = "ELB"
   force_delete              = true
