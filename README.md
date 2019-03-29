@@ -18,3 +18,4 @@ Instance provisioning happens in the related ansible repo. https://github.com/so
 - Kafka multinode: https://docs.confluent.io/current/kafka/multi-node.html
 - AWS Kafka Best Practices: https://aws.amazon.com/blogs/big-data/best-practices-for-running-apache-kafka-on-aws/
 - REST Client docos: https://docs.confluent.io/current/kafka-rest/docs/api.html
+- Kafka clients explained: https://rmoff.net/2018/08/02/kafka-listeners-explained/
